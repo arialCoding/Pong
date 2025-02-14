@@ -22,6 +22,6 @@ private:
 
     Ball ball;
 
-    Paddle paddle;
+    Paddle paddle1, paddle2;
 
 };

@@ -3,12 +3,14 @@
 #define WIDTH 800
 #define HEIGHT 600
 
-Game::Game() : window(sf::VideoMode(WIDTH, HEIGHT), "Ping Pong"), ball(WIDTH, HEIGHT), paddle(WIDTH, HEIGHT)
+Game::Game()
+    : window(sf::VideoMode(WIDTH, HEIGHT), "Ping Pong"), ball(WIDTH, HEIGHT, paddle1, paddle2), paddle1(WIDTH/2, HEIGHT*0.9, ARROWS), paddle2(WIDTH/2, HEIGHT*0.1, WASD)
 {}
 
 void Game::update(float dt)
 {
-    paddle.update(dt);
+    paddle1.update(dt);
+    paddle2.update(dt);
     ball.update(dt);
 }
 
@@ -16,7 +18,8 @@ void Game::render()
 {
     window.clear();
 
-    paddle.render(window);
+    paddle1.render(window);
+    paddle2.render(window);
 
     ball.render(window);
 

@@ -4,9 +4,32 @@
 #define HEIGHT 600
 
 Game::Game()
-    : window(sf::VideoMode(WIDTH, HEIGHT), "Ping Pong"), paddle1(WIDTH/2, HEIGHT*0.9, ARROWS), paddle2(WIDTH/2, HEIGHT*0.1, WASD), ball(WIDTH, HEIGHT, paddle1, paddle2, paused)
+    : window(sf::VideoMode(WIDTH, HEIGHT), "Ping Pong"),
+      paddle1(WIDTH/2, HEIGHT*0.9, ARROWS), paddle2(WIDTH/2, HEIGHT*0.1, WASD),
+      ball(WIDTH, HEIGHT, paddle1, paddle2, paused)
 {
-    state = PLAYING;
+    state = MAINMENU;
+
+    buttons.loadFromFile("resource/Buttons.png");
+
+    VSP.setSize(sf::Vector2f(128, 64));
+    VSP.setOrigin(VSP.getSize()*0.5f);
+    VSP.setPosition(0.5*WIDTH, 0.35*HEIGHT);
+    VSP.setTexture(&buttons);
+    VSP.setTextureRect(sf::IntRect(0, 0, 128, 64));
+
+    VSC.setSize(sf::Vector2f(128, 64));
+    VSC.setOrigin(VSC.getSize()*0.5f);
+    VSC.setPosition(0.5*WIDTH, 0.55*HEIGHT);
+    VSC.setTexture(&buttons);
+    VSC.setTextureRect(sf::IntRect(128, 0, 128, 64));
+
+    QUIT.setSize(sf::Vector2f(128, 64));
+    QUIT.setOrigin(QUIT.getSize()*0.5f);
+    QUIT.setPosition(0.5*WIDTH, 0.75*HEIGHT);
+    QUIT.setTexture(&buttons);
+    QUIT.setTextureRect(sf::IntRect(256, 0, 128, 64));
+
 }
 
 void Game::update(float dt)
@@ -89,12 +112,66 @@ int Game::Run()
 ////////////////////////////////////////////////////STATES////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Game::updateMAINMENU(float dt)
+bool Game::mouseOver(const sf::RectangleShape& body)
+{
+    float deltaX = abs(sf::Mouse::getPosition(window).x - body.getPosition().x);
+    float deltaY = abs(sf::Mouse::getPosition(window).y - body.getPosition().y);
+
+    return deltaX < body.getSize().x*0.5f && deltaY < body.getSize().y*0.5f;
+}
+
+///////////////////////////////////////////////////MAIN MENU//////////////////////////////////////////////////////
+
+void Game::initMAINMENU()
 {
 
 }
 
+void Game::updateMAINMENU(float dt)
+{
+    if(mouseOver(VSP))
+    {
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        {
+            paddle2.setControlType(WASD);
+            ball.reset(1);
+            state = PAUSED;
+        }
+    }
+    else if(mouseOver(VSC))
+    {
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        {
+            paddle2.setControlType(COMPUTER);
+            ball.reset(1);
+            state = PAUSED;
+        }
+    }
+    else if(mouseOver(QUIT))
+    {
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        {
+            window.close();
+        }
+    }
+}
+
 void Game::renderMAINMENU()
+{
+    window.clear(sf::Color(0x1d658a));
+
+    window.draw(VSP);
+    window.draw(VSC);
+    window.draw(QUIT);
+    
+    window.display();
+}
+
+
+
+/////////////////////////////////////////////////////////PAUSED////////////////////////////////////////////////////////////
+
+void Game::initPAUSED()
 {
 
 }
@@ -106,11 +183,16 @@ void Game::updatePAUSED(float dt)
         state = PLAYING;
         paused = false;
     }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) 
+    {
+        state = MAINMENU;
+        paused = false;
+    }
 }
 
 void Game::renderPAUSED()
 {
-    window.clear();
+    window.clear(sf::Color(0x1d658a));
 
     paddle1.render(window);
     paddle2.render(window);
@@ -120,6 +202,14 @@ void Game::renderPAUSED()
     window.display();
 }
 
+
+
+/////////////////////////////////////////////////////////PLAYING////////////////////////////////////////////////////////////
+
+void Game::initPLAYING()
+{
+
+}
 
 void Game::updatePLAYING(float dt)
 {
@@ -130,9 +220,10 @@ void Game::updatePLAYING(float dt)
 
 }
 
+
 void Game::renderPLAYING()
 {
-    window.clear();
+    window.clear(sf::Color(0x1d658a));
 
     paddle1.render(window);
     paddle2.render(window);
@@ -141,3 +232,4 @@ void Game::renderPLAYING()
 
     window.display();
 }
+

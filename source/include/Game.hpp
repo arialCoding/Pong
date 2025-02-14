@@ -23,6 +23,10 @@ private:
     void update(float dt);
     void render();
 
+    void initMAINMENU();
+    void initPAUSED();
+    void initPLAYING();
+
     void updateMAINMENU(float dt);
     void updatePAUSED(float dt);
     void updatePLAYING(float dt);
@@ -31,14 +35,17 @@ private:
     void renderPAUSED();
     void renderPLAYING();
 
+    bool mouseOver(const sf::RectangleShape& body);
+
 private:
     sf::RenderWindow window;
     sf::Event event;
 
     Paddle paddle1, paddle2;
-    
     Ball ball;
 
+    sf::RectangleShape VSP, VSC, QUIT;
+    sf::Texture buttons;
 
     gameState state;
 

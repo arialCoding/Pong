@@ -5,8 +5,8 @@
 
 #include <cstdio>
 
-Ball::Ball(float wWidth, float wHeight, const Paddle& p1, const Paddle& p2)
-    : WIN_WIDTH(wWidth), WIN_HEIGHT(wHeight), p1(p1), p2(p2)
+Ball::Ball(float wWidth, float wHeight, Paddle& p1, Paddle& p2, bool& paused)
+    : WIN_WIDTH(wWidth), WIN_HEIGHT(wHeight), p1(p1), p2(p2), paused(paused)
 {
     xDir = 0.f;
     reset(1);
@@ -48,10 +48,15 @@ void Ball::reset(float dir)
     speed = 200;
 
     yDir = dir;
-    xDir = (xDir)? (-xDir)*(-xDir) : 1.f; 
+    xDir = (xDir)? (-xDir)*(-xDir) : 1.f;
+
+    p1.reset();
+    p2.reset();
+
+    paused = true;
 }
 
-bool Ball::isColliding(const Paddle& p)
+bool Ball::isColliding(Paddle& p)
 {
     sf::Vector2f circleCenter = body.getPosition();
     float radius = body.getRadius();

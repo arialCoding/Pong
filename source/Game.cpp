@@ -129,10 +129,16 @@ void Game::initMAINMENU()
 
 void Game::updateMAINMENU(float dt)
 {
+    VSP.setTextureRect(sf::IntRect(0, 0, 128, 64));
+    VSC.setTextureRect(sf::IntRect(128, 0, 128, 64));
+    QUIT.setTextureRect(sf::IntRect(256, 0, 128, 64));
+
     if(mouseOver(VSP))
     {
+        VSP.setTextureRect(sf::IntRect(0, 64, 128, 64));
         if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
+            VSP.setTextureRect(sf::IntRect(0, 128, 128, 64));
             paddle2.setControlType(WASD);
             ball.reset(1);
             state = PAUSED;
@@ -140,8 +146,10 @@ void Game::updateMAINMENU(float dt)
     }
     else if(mouseOver(VSC))
     {
+        VSC.setTextureRect(sf::IntRect(128, 64, 128, 64));
         if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
+            VSC.setTextureRect(sf::IntRect(128, 128, 128, 64));
             paddle2.setControlType(COMPUTER);
             ball.reset(1);
             state = PAUSED;
@@ -149,8 +157,10 @@ void Game::updateMAINMENU(float dt)
     }
     else if(mouseOver(QUIT))
     {
+        QUIT.setTextureRect(sf::IntRect(256, 64, 128, 64));
         if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
+            QUIT.setTextureRect(sf::IntRect(256, 128, 128, 64));
             window.close();
         }
     }

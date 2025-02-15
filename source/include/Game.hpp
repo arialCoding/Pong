@@ -44,6 +44,10 @@ private:
     Paddle paddle1, paddle2;
     Ball ball;
 
+    sf::Font font;
+    sf::Text s1, s2;
+    unsigned int scoreP1, scoreP2;
+
     sf::RectangleShape VSP, VSC, QUIT;
     sf::Texture buttons;
 

@@ -13,6 +13,11 @@ public:
 
     void reset(float dir);
 
+    inline bool scoreFor1() { return P1Scored; }
+    inline bool scoreFor2() { return P2Scored; }
+
+    inline void resetScored() { P1Scored = P2Scored = false; }
+
 private:
     bool isColliding(Paddle& p);
 
@@ -25,6 +30,9 @@ private:
     float speed;
 
     const float WIN_WIDTH, WIN_HEIGHT;
+
+    bool P1Scored;
+    bool P2Scored;
 
     bool& paused;
 

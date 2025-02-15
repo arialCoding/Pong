@@ -10,14 +10,23 @@ Ball::Ball(float wWidth, float wHeight, Paddle& p1, Paddle& p2, bool& paused)
 {
     xDir = 0.f;
     reset(1);
+    resetScored();
 }
 
 void Ball::update(float dt)
 {
     sf::Vector2f velocity;
     
-    if(body.getPosition().y + body.getRadius() >= WIN_HEIGHT) reset(-1);
-    else if(body.getPosition().y - body.getRadius() <= 0) reset(1);
+    if(body.getPosition().y + body.getRadius() >= WIN_HEIGHT)
+    {
+        P2Scored = true;
+        reset(-1);
+    } 
+    else if(body.getPosition().y - body.getRadius() <= 0)
+    {
+        P1Scored = true;    
+        reset(1);
+    }
 
     if(body.getPosition().x + body.getRadius() >= WIN_WIDTH) xDir = -xDir;
     else if(body.getPosition().x - body.getRadius() <= 0) xDir = -xDir;

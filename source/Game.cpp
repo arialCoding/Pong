@@ -30,6 +30,17 @@ Game::Game()
     QUIT.setTexture(&buttons);
     QUIT.setTextureRect(sf::IntRect(256, 0, 128, 64));
 
+    font.loadFromFile("resource/font.ttf");
+
+    s1.setFont(font);
+    s1.setCharacterSize(32);
+    s1.setFillColor(sf::Color::White);
+    s1.setPosition(10, HEIGHT/2 - 42);
+
+    s2.setFont(font);
+    s2.setCharacterSize(32);
+    s2.setFillColor(sf::Color::White);
+    s2.setPosition(10, HEIGHT/2 + 10);
 }
 
 void Game::update(float dt)
@@ -141,6 +152,7 @@ void Game::updateMAINMENU(float dt)
             VSP.setTextureRect(sf::IntRect(0, 128, 128, 64));
             paddle2.setControlType(WASD);
             ball.reset(1);
+            scoreP1 = scoreP2 = 0;
             state = PAUSED;
         }
     }
@@ -152,6 +164,7 @@ void Game::updateMAINMENU(float dt)
             VSC.setTextureRect(sf::IntRect(128, 128, 128, 64));
             paddle2.setControlType(COMPUTER);
             ball.reset(1);
+            scoreP1 = scoreP2 = 0;
             state = PAUSED;
         }
     }
@@ -198,6 +211,9 @@ void Game::updatePAUSED(float dt)
         state = MAINMENU;
         paused = false;
     }
+
+    s1.setString(std::to_string(scoreP1));
+    s2.setString(std::to_string(scoreP2));
 }
 
 void Game::renderPAUSED()
@@ -208,6 +224,9 @@ void Game::renderPAUSED()
     paddle2.render(window);
 
     ball.render(window);
+
+    window.draw(s1);
+    window.draw(s2);
 
     window.display();
 }
@@ -224,9 +243,24 @@ void Game::initPLAYING()
 void Game::updatePLAYING(float dt)
 {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::P) || paused) state = PAUSED;
+
     paddle1.update(dt);
     paddle2.update(dt);
+    
     ball.update(dt);
+
+    if(ball.scoreFor1())
+    {
+        scoreP2++;
+        ball.resetScored();
+    } else if(ball.scoreFor2())
+    {
+        scoreP1++;
+        ball.resetScored();
+    }
+
+    s1.setString(std::to_string(scoreP1));
+    s2.setString(std::to_string(scoreP2));
 
 }
 
@@ -239,6 +273,9 @@ void Game::renderPLAYING()
     paddle2.render(window);
 
     ball.render(window);
+
+    window.draw(s1);
+    window.draw(s2);
 
     window.display();
 }
